@@ -1,4 +1,4 @@
-package com.seungwon.blog.presentation.apiController;
+package com.seungwon.blog.presentation;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ import com.seungwon.blog.application.dto.MemberDTO;
 import com.seungwon.blog.application.service.MemberService;
 
 @RestController
-@RequestMapping("/api/members")
-public class MemberApiController {
+@RequestMapping("/members")
+public class MemberController {
 	private final MemberService memberService;
 
-	public MemberApiController(MemberService memberService) {
+	public MemberController(MemberService memberService) {
 		this.memberService = memberService;
 	}
 

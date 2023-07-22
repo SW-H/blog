@@ -142,7 +142,10 @@ replay_pid*
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java
 
-.DS_Store
 .gradle
 .idea/
 build
+**/resources/application-db.properties
+**/resources/application.yaml
+**/resources/logback-spring.xml
+**/.DS_Store

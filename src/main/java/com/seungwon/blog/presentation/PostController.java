@@ -1,4 +1,4 @@
-package com.seungwon.blog.presentation.apiController;
+package com.seungwon.blog.presentation;
 
 import java.util.List;
 
@@ -10,11 +10,11 @@ import com.seungwon.blog.application.dto.PostDTO;
 import com.seungwon.blog.application.service.PostService;
 
 @RestController
-@RequestMapping("/api/posts")
-public class PostApiController {
+@RequestMapping("/posts")
+public class PostController {
 	private final PostService postService;
 
-	public PostApiController(PostService postService) {
+	public PostController(PostService postService) {
 		this.postService = postService;
 	}
 
