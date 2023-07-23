@@ -2,13 +2,18 @@ package com.seungwon.blog.presentation;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seungwon.blog.application.dto.MemberDTO;
+import com.seungwon.blog.application.dto.MemberRequestDTO;
 import com.seungwon.blog.application.service.MemberService;
 
 @RestController
@@ -20,9 +25,14 @@ public class MemberController {
 		this.memberService = memberService;
 	}
 
+	@PostMapping()
+	long save(@RequestBody MemberRequestDTO memberRequestDTO) {
+		return memberService.save(memberRequestDTO);
+	}
+
 	@GetMapping()
-	public ResponseEntity<List<MemberDTO>> findAll() {
-		return ResponseEntity.ok(memberService.findAll());
+	public List<MemberDTO> findAll() {
+		return memberService.findAll();
 	}
 
 	@GetMapping(params = "nickName")
@@ -33,5 +43,20 @@ public class MemberController {
 	@GetMapping(params = "email")
 	public MemberDTO findByEmail(@RequestParam String email) {
 		return memberService.findByEmail(email);
+	}
+
+	@GetMapping(params = "id")
+	public MemberDTO findById(@RequestParam long id) {
+		return memberService.findById(id);
+	}
+
+	@PatchMapping("/{id}")
+	long update(@PathVariable long id, @RequestBody MemberDTO memberDTO) {
+		return memberService.update(id, memberDTO);
+	}
+
+	@DeleteMapping("/{id}")
+	void deleteById(@PathVariable long id) {
+		memberService.deleteById(id);
 	}
 }

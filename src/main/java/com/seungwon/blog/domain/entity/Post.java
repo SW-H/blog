@@ -26,6 +26,7 @@ public class Post {
 
 	private LocalDateTime updatedAt;
 
+	@Builder
 	public Post(long id, @NonNull String title, @NonNull String content, long memberId, int hits,
 			LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.id = id;
@@ -41,7 +42,6 @@ public class Post {
 	public Post(@NonNull String title, @NonNull String content, long memberId) {
 		this.title = title;
 		this.content = content;
-		// this.category = category;
 		this.memberId = memberId;
 		createdAt = LocalDateTime.now();
 		updatedAt = createdAt;

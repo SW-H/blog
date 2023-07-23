@@ -13,8 +13,6 @@ import lombok.NonNull;
 @Data
 @Getter
 public class Member {
-	private final LocalDateTime createdAt;
-
 	private Long id;
 
 	@NonNull
@@ -26,9 +24,28 @@ public class Member {
 	@NonNull
 	private String password;
 
+	private LocalDateTime createdAt;
+
 	private LocalDateTime updatedAt;
 
+	private MemberStatus status;
+
+	private final Pattern EMAIL_PATTERN = Pattern.compile("^([\\w\\.\\-_]+)?\\w+@[\\w-_]+(\\.\\w+)+$");
+	private final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,30}$");
+
 	@Builder
+	public Member(Long id, @NonNull String nickName, @NonNull String email, @NonNull String password,
+			LocalDateTime createdAt, LocalDateTime updatedAt) {
+		this.id = id;
+		this.nickName = nickName;
+		this.email = email;
+		this.password = password;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		status = MemberStatus.NORMAL;
+	}
+
+	@Builder//
 	public Member(@NonNull String nickName, @NonNull String email, @NonNull String password) {
 		validateData(nickName, email, password);
 		this.nickName = nickName;
@@ -36,6 +53,29 @@ public class Member {
 		this.password = password;
 		createdAt = LocalDateTime.now();
 		updatedAt = createdAt;
+		status = MemberStatus.NORMAL;
+	}
+
+	@Builder
+	public Member(long id, @NonNull String nickName, @NonNull String email, @NonNull String password) {
+		validateData(nickName, email, password);
+		this.id = id;
+		this.nickName = nickName;
+		this.email = email;
+		this.password = password;
+		status = MemberStatus.NORMAL;
+	}
+
+	@Builder
+	public Member(@NonNull String email, @NonNull String password) {
+		validateEmail(email);
+		validatePassWord(password);
+		this.email = email;
+		this.password = password;
+		nickName = email.split("@")[0];
+		createdAt = LocalDateTime.now();
+		updatedAt = createdAt;
+		status = MemberStatus.NORMAL;
 	}
 
 	private void validateData(@NonNull String nickName, @NonNull String email, @NonNull String password) {
@@ -45,16 +85,13 @@ public class Member {
 	}
 
 	private void validateEmail(String email) {
-		String emailFormat = "^([\\w\\.\\-_]+)?\\w+@[\\w-_]+(\\.\\w+)+$";
-		Pattern pattern = Pattern.compile(emailFormat);
-		if (!pattern.matcher(email).matches()) {
+		if (!EMAIL_PATTERN.matcher(email).matches()) {
 			throw new InvalidDataException(email);
 		}
 	}
 
 	private void validatePassWord(String password) {
-		Pattern passwordFormat = Pattern.compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,30}$");
-		if (!passwordFormat.matcher(password).matches()) {
+		if (!PASSWORD_PATTERN.matcher(password).matches()) {
 			throw new InvalidDataException(password);
 		}
 	}

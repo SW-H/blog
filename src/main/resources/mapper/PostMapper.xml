@@ -10,4 +10,58 @@
         WHERE status='NORMAL'
         ORDER BY updatedAt
     </select>
+
+    <select id="findByTitle" parameterType="String"  resultType="com.seungwon.blog.domain.entity.Post">
+        SELECT id,title,content,memberId,hits,createdAt,updatedAt
+        FROM post
+        WHERE status='NORMAL' and title like CONCAT('%',#{title},'%')
+        ORDER BY updatedAt
+    </select>
+
+    <select id="findByContent"  parameterType="String" resultType="com.seungwon.blog.domain.entity.Post">
+        SELECT id,title,content,memberId,hits,createdAt,updatedAt
+        FROM post
+        WHERE status='NORMAL' and content like CONCAT('%',#{content},'%')
+        ORDER BY updatedAt
+    </select>
+
+    <select id="findByMember" parameterType="long" resultType="com.seungwon.blog.domain.entity.Post">
+        SELECT id,title,content,memberId,hits,createdAt,updatedAt
+        FROM post
+        WHERE status='NORMAL' and memberId = #{memberId}
+        ORDER BY updatedAt
+    </select>
+
+    <select id="findById" parameterType="long" resultType="com.seungwon.blog.domain.entity.Post">
+        SELECT id,title,content,memberId,hits,createdAt,updatedAt
+        FROM post
+        WHERE status='NORMAL' and id=#{id}
+        ORDER BY updatedAt
+    </select>
+
+    <insert id="save" parameterType="com.seungwon.blog.domain.entity.Post">
+        INSERT INTO post(title,content,memberId,hits,createdAt,updatedAt)
+        VALUES (#{title},#{content},#{memberId},#{hits},#{createdAt},#{updatedAt})
+        <selectKey keyProperty="id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID() AS id;
+        </selectKey>
+    </insert>
+
+    <update id="update" parameterType="com.seungwon.blog.domain.entity.Post">
+        UPDATE post
+        SET  title = #{title},
+             content = #{content},
+             memberId = #{memberId},
+             hits = #{hits},
+             createdAt = #{createdAt},
+             updatedAt = #{updatedAt}
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteById" parameterType="long">
+        UPDATE post
+        SET status = 'DELETED'
+        WHERE id=#{id}
+    </delete>
+
 </mapper>

@@ -4,6 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seungwon.blog.infra.MemberRepository">
 
+    <insert id="save" parameterType="com.seungwon.blog.domain.entity.Member">
+        INSERT INTO member(nickName,email,password,createdAt,updatedAt,status)
+        VALUES(#{nickName},#{email},#{password},#{createdAt},#{updatedAt},#{status});
+        <selectKey keyProperty="id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID() AS id;
+        </selectKey>
+    </insert>
+
+    <select id="findLastlySaved" resultType="long">
+    </select>
+
     <select id="findAll" resultType="com.seungwon.blog.domain.entity.Member">
         SELECT id,nickName,email,password,createdAt,updatedAt
         FROM member
@@ -24,4 +35,27 @@
         WHERE nickName=#{nickName} AND status='NORMAL'
         ORDER BY updatedAt
     </select>
+
+    <select id="findById" parameterType="long" resultType="com.seungwon.blog.domain.entity.Member">
+        SELECT id,nickName,email,password,createdAt,updatedAt
+        FROM member
+        WHERE id=#{id} AND status='NORMAL'
+        ORDER BY updatedAt
+    </select>
+
+    <update id="update" parameterType="com.seungwon.blog.domain.entity.Member">
+        UPDATE member
+        SET nickName = #{nickName},
+            email = #{email},
+            password = #{password},
+            updatedAt = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="long">
+        UPDATE member
+        SET status = 'DELETED'
+        WHERE id = #{id}
+    </delete>
+
 </mapper>

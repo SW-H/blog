@@ -11,9 +11,17 @@ import com.seungwon.blog.domain.entity.Post;
 public interface PostRepository {
 	List<Post> findAll();
 
-	Optional<Post> findByTitle(String title);
+	List<Post> findByTitle(String title);
 
-	Optional<Post> findByContent(String content);
+	List<Post> findByContent(String content);
 
-	Optional<Post> findByWriter(long writerId);
+	List<Post> findByMember(long writerId);
+
+	Optional<Post> findById(long id);
+
+	long save(Post post);
+
+	long update(Post post);
+
+	void deleteById(long id);
 }
